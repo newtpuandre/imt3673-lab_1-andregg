@@ -3,7 +3,6 @@ package local.andregg.lab_1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -11,6 +10,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    int balance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,30 +26,22 @@ public class MainActivity extends AppCompatActivity {
 
         //Setup balance
         Random rand = new Random();
-        int randomNum = rand.nextInt((110 - 90) + 1) + 90;
+        balance = rand.nextInt((110 - 90) + 1) + 90;
 
-        lblBalance.setText(Integer.toString(randomNum));
+        lblBalance.setText(Integer.toString(balance));
 
         //Transcations button logic
-        btnTransactions.setOnClickListener((view) -> {
+        btnTransactions.setOnClickListener(v -> {
+                    startActivity(new Intent(MainActivity.this, TransactionActivity.class));
+                });
 
-            //startActivity(new Intent(MainActivity.this,TransferActivity.class));
-
-        });
 
         //Transfer button logic
-
         btnTransfer.setOnClickListener(v -> {
 
             // We start a new activity with the previously created intent.
             startActivity(new Intent(MainActivity.this, TransferActivity.class));
         });
-
-        /*btnTransfer.setOnClickListener((view) ->
-                startActivity(new Intent(MainActivity.this, TransferActivity.class))
-        );*/
-
-
 
     }
 }
