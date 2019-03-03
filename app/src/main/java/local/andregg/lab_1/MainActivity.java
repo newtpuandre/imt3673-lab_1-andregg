@@ -26,11 +26,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         //Variables
         lblBalance = findViewById(R.id.lbl_balance);
         final Button btnTransactions = findViewById(R.id.btn_transactions);
         final Button btnTransfer = findViewById(R.id.btn_transfer);
+
+        final String myUsername = "Angel";
+
+        final String[] friendsItems = {"Alice", "Bob", "Charlie", "Dawn", "Elvis", "Frode"};
 
 
         //Intialize ArrayList
@@ -43,8 +46,7 @@ public class MainActivity extends AppCompatActivity {
         lblBalance.setText(Integer.toString(balance));
 
         //Add first balance transaction to the list.
-        transactions.add(TransferActivity.buildTransactionLog("Angel", balance, balance));
-        //Log.d("app1", TransferActivity.buildTransactionLog(username, balance, balance));
+        transactions.add(TransferActivity.buildTransactionLog(myUsername, balance, balance));
 
         //Transcations button logic
         btnTransactions.setOnClickListener(v -> {
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
             Intent I = new Intent(MainActivity.this, TransferActivity.class);
             //I.putExtra("TransactionLog", transactions);
             I.putExtra("Balance", balance);
+            I.putExtra("FriendsItems", friendsItems);
             startActivityForResult(I, REQUEST_CODE);
         });
 

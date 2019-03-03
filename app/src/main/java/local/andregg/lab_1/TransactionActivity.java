@@ -38,7 +38,8 @@ public class TransactionActivity extends AppCompatActivity implements RecyclerVi
     }
 
     @Override
-    public void onItemClick(View view, int position) {
-        Toast.makeText(this, "You clicked " + adapter.getItem(position) + " on row number " + position, Toast.LENGTH_SHORT).show();
+    public void onLongItemClick(View view, int position) {
+        String[] separated = adapter.getItem(position).split(" | ");
+        Toast.makeText(this, separated[2] + " " + separated[4], Toast.LENGTH_SHORT).show();
     }
 }

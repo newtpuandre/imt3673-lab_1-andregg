@@ -30,15 +30,12 @@ public class TransferActivity extends AppCompatActivity {
         final EditText txtAmount = findViewById(R.id.txt_amount);
         final Spinner FriendsSpinner = findViewById(R.id.spinner_friends);
         final Button btnPay = findViewById(R.id.btn_pay);
-        final TextView btnCheck = findViewById(R.id.lbl_amount_check);
+        final TextView lblCheck = findViewById(R.id.lbl_amount_check);
 
         final int balance = I.getExtras().getInt("Balance");
-        final String myUsername = "Angel";
-
 
         //Setup spinner
-
-        String[] items = new String[]{"Alice", "Bob", "Charlie", "Dawn", "Elvis", "Frode"};
+        String[] items = I.getStringArrayExtra("FriendsItems");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         FriendsSpinner.setAdapter(adapter);
 
@@ -57,8 +54,10 @@ public class TransferActivity extends AppCompatActivity {
 
                 if (txtAmount.getText().toString().trim().length() > 0 && Integer.parseInt(txtAmount.getText().toString()) <= balance) {
                     btnPay.setEnabled(true);
+                    lblCheck.setText("");
                 } else {
                     btnPay.setEnabled(false);
+                    lblCheck.setText("Amount is outside of bounds.");
                 }
 
             }
@@ -67,14 +66,21 @@ public class TransferActivity extends AppCompatActivity {
 
         //Transfer button logic
         btnPay.setOnClickListener(v -> {
-            //Return to Main Activity with transaction information
-            int amount = Integer.parseInt(txtAmount.getText().toString());
-            int newBalance = balance-amount;
-            String returnTransaction = buildTransactionLog(FriendsSpinner.getSelectedItem().toString(), amount, newBalance);
-            I.putExtra("newBalance", newBalance);
-            I.putExtra("transactionLog", returnTransaction);
-            setResult(RESULT_OK, I);
-            finish();
+            if (FriendsSpinner.getSelectedItem().toString() == "") {
+                lblCheck.setText("Please select a recipient.");
+
+            } else {
+
+                //Return to Main Activity with transaction information
+                int amount = Integer.parseInt(txtAmount.getText().toString());
+                int newBalance = balance-amount;
+                String returnTransaction = buildTransactionLog(FriendsSpinner.getSelectedItem().toString(), amount, newBalance);
+                I.putExtra("newBalance", newBalance);
+                I.putExtra("transactionLog", returnTransaction);
+                setResult(RESULT_OK, I);
+                finish();
+            }
+
         });
 
     }
