@@ -1,21 +1,17 @@
 package local.andregg.lab_1;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.icu.text.SimpleDateFormat;
-import android.icu.util.Calendar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    //Variables that need to be accessed from the whole class.
     int balance;
     TextView lblBalance;
     ArrayList<String> transactions;
@@ -30,9 +26,7 @@ public class MainActivity extends AppCompatActivity {
         lblBalance = findViewById(R.id.lbl_balance);
         final Button btnTransactions = findViewById(R.id.btn_transactions);
         final Button btnTransfer = findViewById(R.id.btn_transfer);
-
         final String myUsername = "Angel";
-
         final String[] friendsItems = {"", "Alice", "Bob", "Charlie", "Dawn", "Elvis", "Frode"};
 
 
@@ -71,14 +65,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent dataIntent) {
         super.onActivityResult(requestCode, resultCode, dataIntent);
-        Log.d("App1", "onActivityResult");
         switch (requestCode)
         {
             case REQUEST_CODE:
-                Log.d("App1", "onActivityResult1");
                 if(resultCode == RESULT_OK)
                 {
-                    Log.d("App1", "onActivityResult2");
                     Intent I = getIntent();
                     balance = dataIntent.getIntExtra("newBalance", 0);
                     transactions.add(dataIntent.getStringExtra("transactionLog"));
