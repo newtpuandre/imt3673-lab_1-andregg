@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,7 +38,31 @@ public class TransferActivity extends AppCompatActivity {
 
         //Setup spinner
         String[] items = I.getStringArrayExtra("FriendsItems");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items){
+            @Override
+            public View getDropDownView(int position, View convertView, ViewGroup parent)
+            {
+                View v = null;
+
+                // If this is the empty entry, make it hidden
+                if (position == 0) {
+                    TextView tv = new TextView(getContext());
+                    tv.setHeight(0);
+                    tv.setVisibility(View.GONE);
+                    v = tv;
+                }
+                else {
+                    // Pass convertView as null to prevent reuse of special case views
+                    v = super.getDropDownView(position, null, parent);
+                }
+
+                // Hide scroll bar because it appears sometimes unnecessarily, this does not prevent scrolling
+                parent.setVerticalScrollBarEnabled(false);
+                return v;
+            }
+        };
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         FriendsSpinner.setAdapter(adapter);
 
         btnPay.setEnabled(false);
@@ -66,7 +92,7 @@ public class TransferActivity extends AppCompatActivity {
 
         //Transfer button logic
         btnPay.setOnClickListener(v -> {
-            if (FriendsSpinner.getSelectedItem().toString() == "") {
+            if (FriendsSpinner.getSelectedItemPosition() == 0) {
                 lblCheck.setText("Please select a recipient.");
 
             } else {

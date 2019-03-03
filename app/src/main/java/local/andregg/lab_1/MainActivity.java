@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         final String myUsername = "Angel";
 
-        final String[] friendsItems = {"Alice", "Bob", "Charlie", "Dawn", "Elvis", "Frode"};
+        final String[] friendsItems = {"", "Alice", "Bob", "Charlie", "Dawn", "Elvis", "Frode"};
 
 
         //Intialize ArrayList
