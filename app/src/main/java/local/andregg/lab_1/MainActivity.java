@@ -12,7 +12,9 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     //Variables that need to be accessed from the whole class.
-    int balance;
+    int balance_euro;
+    int balance_cent;
+    String balance;
     TextView lblBalance;
     ArrayList<String> transactions;
     public static final int REQUEST_CODE = 1;
@@ -35,9 +37,10 @@ public class MainActivity extends AppCompatActivity {
 
         //Setup balance
         Random rand = new Random();
-        balance = rand.nextInt((110 - 90) + 1) + 90;
-
-        lblBalance.setText(Integer.toString(balance));
+        balance_euro = rand.nextInt((110 - 90) + 1) + 90;
+        balance_cent = rand.nextInt((99 - 0) + 1);
+        balance = Integer.toString(balance_euro) + "." + Integer.toString(balance_cent);
+        lblBalance.setText(balance);
 
         //Add first balance transaction to the list.
         transactions.add(TransferActivity.buildTransactionLog(myUsername, balance, balance));
@@ -71,9 +74,9 @@ public class MainActivity extends AppCompatActivity {
                 if(resultCode == RESULT_OK)
                 {
                     Intent I = getIntent();
-                    balance = dataIntent.getIntExtra("newBalance", 0);
+                    balance = dataIntent.getStringExtra("newBalance");
                     transactions.add(dataIntent.getStringExtra("transactionLog"));
-                    lblBalance.setText(Integer.toString(balance));
+                    lblBalance.setText(balance);
                 }
         }
     }
