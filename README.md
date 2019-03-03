@@ -13,7 +13,7 @@ Marking/testing/scoring of the implementation is based on the form specified bel
 * [x] (1pt) TransactionsActivity shows new payments correctly.
 * [x] (1pt) TransactionsActivity moves the user back to MainActivity on "back botton" press.
 * [x] (1pt) Pressing btn_transfer moves the user to TransferActivity.
-* [ ] (5pts) The `TransferActivity` has all required UI, the balance amount handling is working correctly with the appropriate lbl_amount_check error messages, and the btn_pay is enabled/disabled when appropriate. Pressing the `btn_pay` creates the new transaction, visible in TransactionsActivity, and updates the user balance accordingly.
+* [X] (5pts) The `TransferActivity` has all required UI, the balance amount handling is working correctly with the appropriate lbl_amount_check error messages, and the btn_pay is enabled/disabled when appropriate. Pressing the `btn_pay` creates the new transaction, visible in TransactionsActivity, and updates the user balance accordingly.
 * [X] (1pt) The app never crashes. In particular, changing from landscape to portrait and vice-versa does not crash the app.
 
 **Bonus tasks**
