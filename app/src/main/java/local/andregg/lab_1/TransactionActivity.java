@@ -1,6 +1,7 @@
 package local.andregg.lab_1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,18 +24,15 @@ public class TransactionActivity extends AppCompatActivity implements RecyclerVi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
 
-        // data to populate the RecyclerView with
-        ArrayList<String> animalNames = new ArrayList<>();
-        animalNames.add("15:31:14 | Alice | 15.43 -> 80.00");
-        animalNames.add("Cow");
-        animalNames.add("Camel");
-        animalNames.add("Sheep");
-        animalNames.add("Goat");
+        //Handle incoming
+        Intent I = getIntent();
+
+        ArrayList<String> transactions = I.getExtras().getStringArrayList("TransactionLog");
 
         // set up the RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RecyclerViewAdapter(this, animalNames);
+        adapter = new RecyclerViewAdapter(this, transactions);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }
