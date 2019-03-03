@@ -27,4 +27,4 @@ Marking/testing/scoring of the implementation is based on the form specified bel
 **Total: 20**
 
 
-Icons made by https://www.flaticon.com/authors/smashicons
+Icon made by https://www.flaticon.com/authors/smashicons
