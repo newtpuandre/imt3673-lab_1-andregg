@@ -128,7 +128,6 @@ public class TransferActivity extends AppCompatActivity {
         sb.append(transfer);
         sb.append(" | ");
         sb.append(balance);
-
         return (sb.toString());
     }
 

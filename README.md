@@ -1,5 +1,9 @@
 # imt3673-lab_1-andregg
 
+## Notes:
+* The balance is stored and passed arround as an int within the app.
+* Inorder to get the correct balance: Whole euros = int / 100 and cents = int % 100;. A couple checks need to be done in order to be confident that the cents are displayed correctly. cents < 10. See code (Transfer activity : calculateRequest();)
+
 # Marking 
 
 Marking/testing/scoring of the implementation is based on the form specified below. The total score is based on the sum of the individual items tested. The test either "Fails" or "Passes" - the task cannot be "Partial", ie. partial means "Fail". Each test case has a score associated with it - most are worth 1 point, but some are worth more. The marking schedule is based on ticking the appropriate test cases and then summing up those that have been ticked. 
