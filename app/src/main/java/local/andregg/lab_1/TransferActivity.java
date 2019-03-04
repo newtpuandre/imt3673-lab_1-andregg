@@ -31,21 +31,16 @@ public class TransferActivity extends AppCompatActivity {
         final Spinner FriendsSpinner = findViewById(R.id.spinner_friends);
         final Button btnPay = findViewById(R.id.btn_pay);
         final TextView lblCheck = findViewById(R.id.lbl_amount_check);
-        final String balance = I.getExtras().getString("Balance");
-
-        //Split balance into whole euros and cents
-        String[] separatedBalance = new String[]{};
-        separatedBalance = balance.split("\\.");
-        final int balance_euro = Integer.parseInt(separatedBalance[0]);
-        final int balance_cent = Integer.parseInt(separatedBalance[1]);
+        final int balance = I.getExtras().getInt("Balance");
 
         //Setup spinner
         String[] items = I.getStringArrayExtra("FriendsItems");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, items){
+            //Make so the first item in the dropdown is hidden since this is the dummy item.
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent)
             {
-                View v = null;
+                View v; // = null
 
                 // If this is the empty entry, make it hidden
                 if (position == 0) {
@@ -64,12 +59,13 @@ public class TransferActivity extends AppCompatActivity {
                 return v;
             }
         };
-
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         FriendsSpinner.setAdapter(adapter);
 
+        //Disable button by default
         btnPay.setEnabled(false);
 
+        //TextWatcher for checking amount in txtAmount Edittext
         txtAmount.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {}
@@ -80,30 +76,19 @@ public class TransferActivity extends AppCompatActivity {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //Split into whole euro and cents
-                if(txtAmount.getText().toString().contains(".")) {
-                    String[] tempSepareted = txtAmount.getText().toString().split("\\.");
-                    if (tempSepareted.length == 2) {
-                        Log.d("app1", txtAmount.getText().toString());
-                        int tempEuro = Integer.parseInt(tempSepareted[0]);
-                        int tempCent = Integer.parseInt(tempSepareted[1]);
+                //Convert to a whole int
+                if (txtAmount.getText().toString().length() > 0) {
+                    int calculatedRequest = calculateRequest(txtAmount.getText().toString());
 
-                        if (balance_euro >= tempEuro || balance_cent >= tempCent) {
-                        Log.d("app1", "Seems good");
-                        }
+                    if ( calculatedRequest <= balance) { //Is inserted amount withing the bounds
+                        btnPay.setEnabled(true);
+                        lblCheck.setText("");
+                    } else {
+                        btnPay.setEnabled(false);
+                        lblCheck.setText("Amount is outside of bounds.");
                     }
-
-
-                } else {
-
-                }
-
-                if (txtAmount.getText().toString().trim().length() > 0) {
-                    btnPay.setEnabled(true);
-                    lblCheck.setText("");
                 } else {
                     btnPay.setEnabled(false);
-                    lblCheck.setText("Amount is outside of bounds.");
                 }
 
             }
@@ -118,11 +103,13 @@ public class TransferActivity extends AppCompatActivity {
             } else {
 
                 //Return to Main Activity with transaction information
-                int amount = Integer.parseInt(txtAmount.getText().toString());
-                //String newBalance = calculateBalance(balance ,balance_euro, balance_cent);
-                //String returnTransaction = buildTransactionLog(FriendsSpinner.getSelectedItem().toString(), amount, newBalance);
-                //I.putExtra("newBalance", newBalance);
-                //I.putExtra("transactionLog", returnTransaction);
+                int calculatedRequest = calculateRequest(txtAmount.getText().toString());
+
+                int newBalance = balance - calculatedRequest;
+                String returnTransaction = buildTransactionLog(FriendsSpinner.getSelectedItem().toString(),
+                        calculateBalance(calculatedRequest),  calculateBalance(newBalance));
+                I.putExtra("newBalance", newBalance);
+                I.putExtra("transactionLog", returnTransaction);
                 setResult(RESULT_OK, I);
                 finish();
             }
@@ -131,6 +118,7 @@ public class TransferActivity extends AppCompatActivity {
 
     }
 
+    //Builds the transaction log.
     static public String buildTransactionLog(String user, String transfer, String balance){
         StringBuilder sb = new StringBuilder();
         sb.append(TransferActivity.getCurTime());
@@ -144,6 +132,7 @@ public class TransferActivity extends AppCompatActivity {
         return (sb.toString());
     }
 
+    //Gets current timestamp
     static public String getCurTime() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat dateformat = new SimpleDateFormat("HH:mm:ss");
@@ -151,9 +140,38 @@ public class TransferActivity extends AppCompatActivity {
         return datetime;
     }
 
-    static public String calculateBalance(String balance, int balance_euro, int balance_cent) {
+    //Calculates from a whole integer into a string containing euros and cents
+    static public String calculateBalance(int balance) {
+        String ret; //Return string
 
-        return "test";
+        int euro = balance / 100;
+        int cent = balance % 100;
+
+        if (Integer.parseInt(String.valueOf(cent)) < 10 ) { //Add a zero to make value correct
+            ret = String.valueOf(euro) + ".0" + String.valueOf(cent);
+        } else {
+            ret = String.valueOf(euro) + "." + String.valueOf(cent);
+        }
+
+        return ret;
+    }
+
+    //Calculate requested transfer based on input string.
+    static public int calculateRequest (String value) {
+        int calculatedRequest;
+        String[] separated = value.split("\\.");
+        if (separated.length == 2) { //Actually got cents
+            char firstDigit = separated[1].charAt(0);
+            if(Integer.parseInt(String.valueOf(firstDigit)) == 0) { //Number is below 10
+                calculatedRequest = Integer.parseInt(separated[0]) * 100 + Integer.parseInt(separated[1]);
+            } else { //Number is a multiple of 10
+                calculatedRequest = Integer.parseInt(separated[0]) * 100 + (Integer.parseInt(separated[1]) * 10);
+            }
+        } else { //Calculate whole euros
+            calculatedRequest = Integer.parseInt(separated[0]) * 100;
+        }
+
+        return calculatedRequest;
     }
 
 }

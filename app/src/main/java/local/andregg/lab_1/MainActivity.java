@@ -3,6 +3,7 @@ package local.andregg.lab_1;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -14,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     //Variables that need to be accessed from the whole class.
     int balance_euro;
     int balance_cent;
-    String balance;
+    int balance;
     TextView lblBalance;
     ArrayList<String> transactions;
     public static final int REQUEST_CODE = 1;
@@ -37,13 +38,13 @@ public class MainActivity extends AppCompatActivity {
 
         //Setup balance
         Random rand = new Random();
-        balance_euro = rand.nextInt((110 - 90) + 1) + 90;
-        balance_cent = rand.nextInt((99 - 0) + 1);
-        balance = Integer.toString(balance_euro) + "." + Integer.toString(balance_cent);
-        lblBalance.setText(balance);
+        balance_euro = rand.nextInt((109 - 90) + 1) + 90;
+        balance_cent = rand.nextInt((99) + 1);
+        balance = balance_euro * 100 + balance_cent;
+        lblBalance.setText(TransferActivity.calculateBalance(balance));
 
         //Add first balance transaction to the list.
-        transactions.add(TransferActivity.buildTransactionLog(myUsername, balance, balance));
+        transactions.add(TransferActivity.buildTransactionLog(myUsername, TransferActivity.calculateBalance(balance), TransferActivity.calculateBalance(balance)));
 
         //Transcations button logic
         btnTransactions.setOnClickListener(v -> {
@@ -73,10 +74,9 @@ public class MainActivity extends AppCompatActivity {
             case REQUEST_CODE:
                 if(resultCode == RESULT_OK)
                 {
-                    Intent I = getIntent();
-                    balance = dataIntent.getStringExtra("newBalance");
+                    balance = dataIntent.getIntExtra("newBalance", 0);
                     transactions.add(dataIntent.getStringExtra("transactionLog"));
-                    lblBalance.setText(balance);
+                    lblBalance.setText(TransferActivity.calculateBalance(balance));
                 }
         }
     }
