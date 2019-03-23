@@ -1,7 +1,7 @@
 # imt3673-lab_1-andregg
 
 ## Notes:
-* The app is created using the Android API 28 ( Android Pie ), this is a bad assumption from my side...
+* The app is created using the Android API 28 ( Android Pie ), this is a bad assumption from my side... (I can show the app in person on my phone if needed)
 * The balance is stored and passed arround as an int within the app.
 * Inorder to get the correct balance: Whole euros = int / 100 and cents = int % 100;. A couple checks need to be done in order to be confident that the cents are displayed correctly. cents < 10. See code (Transfer activity : calculateRequest();)
 
